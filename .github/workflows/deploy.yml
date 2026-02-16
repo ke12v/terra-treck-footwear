@@ -17,12 +17,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
       - run: npm ci
       - run: npm run build
+
+      # ✅ FIX for React/Vite routes (SPA): prevents 404 on refresh / direct link
+      - name: SPA fallback for GitHub Pages
+        run: cp dist/public/index.html dist/public/404.html
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/public
